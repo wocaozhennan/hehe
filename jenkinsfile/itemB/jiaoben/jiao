@@ -1,7 +1,7 @@
 node ("slave") {
     
     stage('Build') {
-        checkout([$class: 'GitSCM', branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[credentialsId: '5e9ba67e-b4c4-445a-ab59-4d3b81ee17df', url: 'root@192.168.200.152:/mycode']]])
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '5e9ba67e-b4c4-445a-ab59-4d3b81ee17df', url: 'root@192.168.200.152:/mycode']]])
     }
     stage('Results') {
         sh '/usr/local/maven/bin/mvn clean package -Dmaven.test.skip=true'
