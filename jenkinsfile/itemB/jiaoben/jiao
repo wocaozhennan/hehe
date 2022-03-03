@@ -1,0 +1,25 @@
+node ("slave") {
+    
+    stage('Build') {
+        checkout([$class: 'GitSCM', branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[credentialsId: '5e9ba67e-b4c4-445a-ab59-4d3b81ee17df', url: 'root@192.168.200.152:/mycode']]])
+    }
+    stage('Results') {
+        sh '/usr/local/maven/bin/mvn clean package -Dmaven.test.skip=true'
+    }
+    stage('deplay') {
+            sh '''
+        JENKINS_NODE_COOKIE=dontkillme
+        wwwroot=/usr/local/tomcat/webapps/ROOT
+            [ -d /date/backup ] || mkdir -p /date/backup
+            if [ -d $wwwroot  ];then
+                mv  $wwwroot  /date/backup/tomcat-$(date +%F_%T) 
+            fi
+            unzip ${WORKSPACE}/target/*.war  -d  $wwwroot
+            pid=$(ps -ef | grep tomcat | egrep -v "grep|$$“| awk \'{print $2}\')
+            [ -n "$pid"  ] && kill -9 $pid
+            /bin/bash  /usr/local/tomcat/bin/startup.sh '''
+    }
+    stage('test') {
+            sh 'echo success'
+    } 
+}
