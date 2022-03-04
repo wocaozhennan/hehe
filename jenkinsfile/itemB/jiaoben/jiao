@@ -14,7 +14,7 @@ node ("slave") {
             if [ -d $wwwroot  ];then
                 mv  $wwwroot  /date/backup/tomcat-$(date +%F_%T) 
             fi
-            unzip ${WORKSPACE}/target/*.war  -d  $wwwroot
+            unzip ${WORKSPACE}/target/*.jar  -d  $wwwroot
             pid=$(ps -ef | grep tomcat | egrep -v "grep|$$“| awk \'{print $2}\')
             [ -n "$pid"  ] && kill -9 $pid
             /bin/bash  /usr/local/tomcat/bin/startup.sh '''
