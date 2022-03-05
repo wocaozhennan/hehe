@@ -15,8 +15,9 @@ node ("slave") {
                 mv  $wwwroot  /date/backup/tomcat-$(date +%F_%T) 
             fi
             unzip ${WORKSPACE}/target/*.jar  -d  $wwwroot
-            PID=$(ps -ef | grep tomcat | egrep -v "grep|“| awk \'{print $2}\')
-            [ -n "$PID"  ] && kill -9 $PID
+            //PID=$(ps -ef | grep tomcat | egrep -v "grep|“| awk \'{print $2}\')
+            //[ -n "$PID"  ] && kill -9 $PID
+            /bin/bash  /usr/local/tomcat/bin/shutdown.sh
             /bin/bash  /usr/local/tomcat/bin/startup.sh '''
     }
     stage('test') {
